@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missão Verde 🌱</title>
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(to bottom, #b6e5b6, #e8f5e9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: #2e7d32;
+    text-align: center;
+    margin: 0;
+  }
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 30px;
+    max-width: 420px;
+    animation: fadeIn 0.8s;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    margin: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover { background-color: #45a049; }
+  #feedback {
+    margin-top: 15px;
+    font-weight: 600;
+    font-size: 1.1em;
+  }
+  img {
+    width: 120px;
+    height: 120px;
+    margin: 10px;
+  }
+  .emoji {
+    font-size: 2em;
+    animation: bounce 0.8s;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h2 id="titulo">Missão Verde 🌳</h2>
+    <img id="imagem" src="https://cdn-icons-png.flaticon.com/512/427/427735.png" alt="etapa">
+    <p id="pergunta">Clique no botão abaixo para iniciar sua missão!</p>
+    <div id="opcoes">
+      <button onclick="iniciarMissao()">🌱 Começar Missão</button>
+    </div>
+    <p id="feedback"></p>
+  </div>
+
+  <audio id="musicaFundo" src="https://cdn.pixabay.com/download/audio/2023/04/05/audio_4bcb5c19b1.mp3?filename=funny-bgm-143859.mp3" loop></audio>
+  <audio id="somAcerto" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_aa41f3b85b.mp3?filename=success-1-6297.mp3"></audio>
+  <audio id="somErro" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_4f011c2fcb.mp3?filename=error-126627.mp3"></audio>
+
+<script>
+const etapas = [
+  { pergunta: "1️⃣ Qual é o primeiro passo do reflorestamento?", opcoes: ["Plantar as mudas", "Escolher a área degradada", "Regar o solo"], correta: 1, explicacao: "Antes de plantar, precisamos escolher a área que será reflorestada!", imagem: "https://cdn-icons-png.flaticon.com/512/427/427735.png" },
+  { pergunta: "2️⃣ Depois de escolher a área, o que vem a seguir?", opcoes: ["Analisar o solo", "Trazer animais silvestres", "Pintar placas"], correta: 0, explicacao: "Precisamos analisar o solo para garantir que ele tem os nutrientes certos.", imagem: "https://cdn-icons-png.flaticon.com/512/3162/3162947.png" },
+  { pergunta: "3️⃣ O que fazemos após analisar o solo?", opcoes: ["Selecionar espécies nativas", "Cavar buracos aleatórios", "Regar com mangueira"], correta: 0, explicacao: "As espécies nativas são adaptadas ao clima e ajudam o ecossistema local.", imagem: "https://cdn-icons-png.flaticon.com/512/1998/1998673.png" },
+  { pergunta: "4️⃣ Qual é o próximo passo depois de escolher as espécies?", opcoes: ["Preparar o terreno", "Fazer uma festa", "Cortar as árvores antigas"], correta: 0, explicacao: "Precisamos limpar o terreno e adubar para receber as novas mudas.", imagem: "https://cdn-icons-png.flaticon.com/512/2603/2603133.png" },
+  { pergunta: "5️⃣ Agora que o terreno está pronto, o que fazemos?", opcoes: ["Plantar as mudas", "Esperar chover", "Pintar o chão"], correta: 0, explicacao: "Hora de plantar as mudas no solo, respeitando o espaçamento entre elas!", imagem: "https://cdn-icons-png.flaticon.com/512/766/766535.png" },
+  { pergunta: "6️⃣ Após o plantio, o que é importante fazer?", opcoes: ["Regar e cuidar das mudas", "Deixar sem atenção", "Cobrir com plástico"], correta: 0, explicacao: "As mudas precisam de água, sombra e proteção contra pragas.", imagem: "https://cdn-icons-png.flaticon.com/512/4150/4150919.png" },
+  { pergunta: "7️⃣ O que devemos fazer nos meses seguintes ao plantio?", opcoes: ["Monitorar o crescimento", "Esquecer o local", "Colher frutas"], correta: 0, explicacao: "O monitoramento garante que as mudas cresçam saudáveis e substituímos as que morrerem.", imagem: "https://cdn-icons-png.flaticon.com/512/1721/1721929.png" },
+  { pergunta: "8️⃣ Como podemos envolver a comunidade?", opcoes: ["Com educação ambiental", "Com fogos de artifício", "Proibindo visitas"], correta: 0, explicacao: "A educação ambiental faz todos cuidarem melhor da floresta.", imagem: "https://cdn-icons-png.flaticon.com/512/4762/4762186.png" },
+  { pergunta: "9️⃣ Que atitude ajuda a manter o reflorestamento?", opcoes: ["Evitar queimadas e desmatamento", "Jogar lixo na área", "Construir estradas"], correta: 0, explicacao: "Evitar queimadas e desmatamento é essencial para proteger as árvores.", imagem: "https://cdn-icons-png.flaticon.com/512/5502/5502650.png" },
+  { pergunta: "🔟 Quando o reflorestamento está completo, o que devemos fazer?", opcoes: ["Celebrar e continuar cuidando", "Abandonar a área", "Cortar as árvores maduras"], correta: 0, explicacao: "Devemos celebrar o sucesso e continuar cuidando da floresta para o futuro!", imagem: "https://cdn-icons-png.flaticon.com/512/2422/2422693.png" }
+];
+
+let etapaAtual = 0;
+let acertos = 0;
+
+function iniciarMissao() {
+  const musica = document.getElementById("musicaFundo");
+  musica.volume = 0.2;
+  musica.play();
+  mostrarEtapa();
+}
+
+function mostrarEtapa() {
+  const etapa = etapas[etapaAtual];
+  document.getElementById("pergunta").innerText = etapa.pergunta;
+  document.getElementById("imagem").src = etapa.imagem;
+  const opcoesDiv = document.getElementById("opcoes");
+  opcoesDiv.innerHTML = "";
+  document.getElementById("feedback").innerText = "";
+  etapa.opcoes.forEach((texto, i) => {
+    const btn = document.createElement("button");
+    btn.innerText = texto;
+    btn.onclick = () => verificarResposta(i);
+    opcoesDiv.appendChild(btn);
+  });
+}
+
+function verificarResposta(i) {
+  const etapa = etapas[etapaAtual];
+  const feedback = document.getElementById("feedback");
+  const somAcerto = document.getElementById("somAcerto");
+  const somErro = document.getElementById("somErro");
+  
+  if (i === etapa.correta) {
+    acertos++;
+    feedback.style.color = "#2e7d32";
+    feedback.innerHTML = "✅ <span class='emoji'>😄🌿</span> Correto!";
+    somAcerto.play();
+  } else {
+    feedback.style.color = "#d32f2f";
+    feedback.innerHTML = "❌ <span class='emoji'>😢💔</span> " + etapa.explicacao;
+    somErro.play();
+  }
+
+  etapaAtual++;
+  if (etapaAtual < etapas.length) {
+    setTimeout(mostrarEtapa, 2500);
+  } else {
+    setTimeout(mostrarResultado, 2500);
+  }
+}
+
+function mostrarResultado() {
+  const titulo = document.getElementById("titulo");
+  const img = document.getElementById("imagem");
+  const pergunta = document.getElementById("pergunta");
+  const opcoes = document.getElementById("opcoes");
+  const feedback = document.getElementById("feedback");
+  
+  let mensagemFinal = "";
+  let emojiFinal = "";
+  if (acertos === etapas.length) {
+    mensagemFinal = "🌳 Você é um verdadeiro ECOLOGISTA! O planeta agradece!";
+    emojiFinal = "😎🌍";
+    img.src = "https://cdn-icons-png.flaticon.com/512/1995/1995574.png";
+  } else if (acertos >= etapas.length / 2) {
+    mensagemFinal = "💚 Você está no caminho verde! Continue cuidando da natureza!";
+    emojiFinal = "😊🌱";
+    img.src = "https://cdn-icons-png.flaticon.com/512/190/190411.png";
+  } else {
+    mensagemFinal = "🔥 Ops... você virou um DESTRUIDOR DE MUNDOS! Mas dá tempo de mudar! 💪🌎";
+    emojiFinal = "😅🌋";
+    img.src = "https://cdn-icons-png.flaticon.com/512/4829/4829586.png";
+  }
+
+  titulo.innerText = "Fim da Missão 🌱";
+  pergunta.innerText = `Você acertou ${acertos} de ${etapas.length} etapas!`;
+  opcoes.innerHTML = "";
+  feedback.innerHTML = `${emojiFinal} ${mensagemFinal}`;
+
+  const botaoReiniciar = document.createElement("button");
+  botaoReiniciar.innerText = "🔁 Jogar novamente";
+  botaoReiniciar.style.backgroundColor = "#388e3c";
+  botaoReiniciar.style.fontSize = "1.1em";
+  botaoReiniciar.onclick = reiniciarJogo;
+  opcoes.appendChild(botaoReiniciar);
+}
+
+function reiniciarJogo() {
+  etapaAtual = 0;
+  acertos = 0;
+  mostrarEtapa();
+}
+</script>
+</body>
+</html>
